@@ -7,7 +7,7 @@ Ke = 25;
 
 % Actuator
 Jm = 0.0104;
-dm = 0.4;
+dm = 0.0;
 n = 102.8393;
 
 % Spring
@@ -19,5 +19,5 @@ Ki = 0;
 Kd = 0.8;
 
 % DOB filter
-wc = 10;
+wc = 100;
 w2 = wc*wc;
