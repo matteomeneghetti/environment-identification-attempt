@@ -8,7 +8,7 @@ function setup(block)
 
 % Register number of ports
 block.NumInputPorts  = 2;
-block.NumOutputPorts = 3;
+block.NumOutputPorts = 2;
 
 % Setup port properties to be inherited or dynamic
 block.SetPreCompInpPortInfoToDynamic;
@@ -38,12 +38,6 @@ block.OutputPort(2).Dimensions       = 1;
 block.OutputPort(2).DatatypeID  = 0; % double
 block.OutputPort(2).Complexity  = 'Real';
 block.OutputPort(2).SamplingMode = 'Sample';
-
-% x0
-block.OutputPort(3).Dimensions =          1;
-block.OutputPort(3).DatatypeID =          0; % double
-block.OutputPort(3).Complexity =     'Real';
-block.OutputPort(3).SamplingMode = 'Sample';
 
 % Register parameters
 block.NumDialogPrms     = 0;
@@ -92,19 +86,13 @@ block.RegBlockMethod('SetInputPortSamplingMode', @SetInpPortFrameData);
 %%   C MEX counterpart: mdlSetWorkWidths
 %%
 function DoPostPropSetup(block)
-block.NumDworks = 2;
+block.NumDworks = 1;
   
   block.Dwork(1).Name            = 'Ke';
   block.Dwork(1).Dimensions      = 1;
   block.Dwork(1).DatatypeID      = 0;      % double
   block.Dwork(1).Complexity      = 'Real';
   block.Dwork(1).UsedAsDiscState = true;
-
-  block.Dwork(2).Name            = 'x0';
-  block.Dwork(2).Dimensions      = 1;
-  block.Dwork(2).DatatypeID      = 0;      % double
-  block.Dwork(2).Complexity      = 'Real';
-  block.Dwork(2).UsedAsDiscState = true;
 
 
 %%
@@ -132,7 +120,6 @@ function InitializeConditions(block)
 function Start(block)
 
 block.Dwork(1).Data = 25;
-block.Dwork(2).Data = 0;
 
 %end Start
 
@@ -145,12 +132,10 @@ block.Dwork(2).Data = 0;
 %%
 function Outputs(block)
 Ke = block.Dwork(1).Data;
-x0 = block.Dwork(2).Data;
 qm = block.InputPort(1).Data;
 
 block.OutputPort(1).Data = qm*Ke; % taue = Ke(qm-qe)
 block.OutputPort(2).Data = block.Dwork(1).Data; % output Ke
-block.OutputPort(3).Data = block.Dwork(2).Data; % output x0
 %end Outputs
 
 %%
@@ -162,11 +147,8 @@ block.OutputPort(3).Data = block.Dwork(2).Data; % output x0
 %%
 function Update(block)
 time = block.InputPort(2).Data;
-% block.Dwork(1).Data = 25*(sin(2*pi*time)+1.1);
-% block.Dwork(1).Data = 25;
 if time > 3.0
     block.Dwork(1).Data = 25*(sin(2*pi*time*0.25)+1.1);
-    % block.Dwork(2).Data = 1;
 end
 
 %end Update
