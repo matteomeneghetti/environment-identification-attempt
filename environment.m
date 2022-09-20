@@ -148,7 +148,7 @@ block.OutputPort(2).Data = block.Dwork(1).Data; % output Ke
 function Update(block)
 time = block.InputPort(2).Data;
 if time > 3.0
-    block.Dwork(1).Data = 25*(sin(2*pi*time*0.25)+1.1);
+    block.Dwork(1).Data = 25*(sin(2*pi*time*0.25)+1.0);
 end
 
 %end Update
